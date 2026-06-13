@@ -1,0 +1,6 @@
+api/chroma_db/
+api/hr_copilot.db
+api/__pycache__/
+node_modules/
+*.pyc
+.env
