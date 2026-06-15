@@ -10,47 +10,46 @@
 <style>
 * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
 :root {
-  --primary: #004ac6;
-  --primary-container: #2563eb;
-  --on-primary: #ffffff;
-  --secondary: #712ae2;
-  --secondary-container: #8a4cfc;
-  --on-secondary: #ffffff;
-  --surface: #f8f9ff;
-  --surface-low: #eff4ff;
-  --surface-container: #e5eeff;
-  --surface-high: #dce9ff;
-  --surface-white: #ffffff;
-  --on-surface: #0b1c30;
-  --on-surface-variant: #434655;
-  --outline: #737686;
-  --outline-variant: #c3c6d7;
-  --error: #ba1a1a;
-  --error-container: #ffdad6;
-  --tertiary: #943700;
+  --primary: #004ac6; --primary-container: #2563eb; --on-primary: #ffffff;
+  --secondary: #712ae2; --secondary-container: #8a4cfc; --on-secondary: #ffffff;
+  --surface: #f8f9ff; --surface-low: #eff4ff; --surface-container: #e5eeff;
+  --surface-white: #ffffff; --on-surface: #0b1c30; --on-surface-variant: #434655;
+  --outline: #737686; --outline-variant: #c3c6d7;
+  --error: #ba1a1a; --error-container: #ffdad6;
 }
 body { background: var(--surface); color: var(--on-surface); margin: 0; }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; font-size: 20px; }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-thumb { background: var(--outline-variant); border-radius: 10px; }
-.sidebar { width: 260px; min-width: 260px; background: var(--surface-low); border-right: 1px solid var(--outline-variant); display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; }
+.sidebar { width: 260px; min-width: 260px; background: var(--surface-low); border-right: 1px solid var(--outline-variant); display: flex; flex-direction: column; height: 100vh; position: sticky; top: 0; transition: transform 0.3s ease; z-index: 40; }
+@media (max-width: 768px) {
+  .sidebar { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
+  .sidebar.open { transform: translateX(0); }
+  .mobile-overlay { display: block !important; }
+  .mobile-header { display: flex !important; }
+  #app { flex-direction: column; }
+  .main-content { height: 100vh; }
+  .chat-bubble-user { max-width: 85%; }
+  .chat-bubble-ai { max-width: 95%; }
+  .workflow-card { padding: 14px 16px; }
+  .modal-box { padding: 20px 16px; margin: 0 8px; }
+}
 .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; cursor: pointer; color: var(--on-surface-variant); font-size: 14px; font-weight: 500; transition: all 0.15s; }
 .nav-item:hover { background: var(--surface-container); color: var(--on-surface); }
 .nav-item.active { background: var(--surface-container); color: var(--primary); }
 .nav-item.active .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 .page { display: none; }
 .page.active { display: flex; flex-direction: column; flex: 1; overflow: hidden; }
-.role-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--outline-variant); background: var(--surface-white); transition: all 0.2s; }
+.role-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid var(--outline-variant); background: var(--surface-white); transition: all 0.2s; width: 100%; justify-content: center; margin-bottom: 16px; }
 .role-badge:hover { background: var(--surface-container); }
 .chat-bubble-user { background: var(--primary); color: white; border-radius: 16px 16px 4px 16px; padding: 12px 16px; max-width: 70%; margin-left: auto; font-size: 14px; line-height: 1.5; }
 .chat-bubble-ai { background: var(--surface-white); border: 1px solid var(--outline-variant); border-left: 3px solid var(--secondary); border-radius: 4px 16px 16px 16px; padding: 14px 16px; max-width: 85%; font-size: 14px; line-height: 1.6; box-shadow: 0 2px 8px rgba(113,42,226,0.06); }
-.action-card { border: 1px solid var(--outline-variant); border-radius: 12px; padding: 14px; background: var(--surface-white); }
+.action-card { border: 1px solid var(--outline-variant); border-radius: 12px; padding: 14px; background: var(--surface-white); margin-top: 10px; }
 .action-card.action-type { border-left: 3px solid var(--primary); }
 .action-card.info-type { border-left: 3px solid var(--secondary); }
 .action-card.alert-type { border-left: 3px solid var(--error); background: #fff8f8; }
 .btn-primary { background: var(--primary); color: white; border: none; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; }
 .btn-primary:hover { opacity: 0.9; transform: scale(0.98); }
-.btn-secondary { background: var(--secondary); color: white; border: none; border-radius: 8px; padding: 8px 18px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; }
 .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--outline-variant); border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; }
 .btn-outline:hover { background: var(--surface-low); }
 .stat-card { background: var(--surface-white); border: 1px solid var(--outline-variant); border-radius: 12px; padding: 16px 20px; }
@@ -59,40 +58,55 @@ body { background: var(--surface); color: var(--on-surface); margin: 0; }
 .badge-approved { background: #d1fae5; color: #065f46; }
 .badge-rejected { background: #fee2e2; color: #991b1b; }
 .badge-processing { background: #dbeafe; color: #1e40af; }
-.table-row { border-bottom: 1px solid var(--outline-variant); }
-.table-row:hover { background: var(--surface-low); }
-input, textarea, select { font-family: 'Inter', sans-serif; }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; display: flex; align-items: center; justify-content: center; }
-.modal-box { background: white; border-radius: 16px; padding: 28px; max-width: 560px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+.modal-box { background: white; border-radius: 16px; padding: 28px; max-width: 560px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); max-height: 90vh; overflow-y: auto; }
 .thinking-dots span { display: inline-block; animation: blink 1.4s infinite; }
 .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
 .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes blink { 0%,80%,100%{opacity:0.2} 40%{opacity:1} }
-.source-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--surface-container); border: 1px solid var(--outline-variant); border-radius: 6px; padding: 2px 8px; font-size: 11px; color: var(--on-surface-variant); cursor: pointer; }
-.kb-item { background: var(--surface-white); border: 1px solid var(--outline-variant); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: all 0.15s; }
+.source-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--surface-container); border: 1px solid var(--outline-variant); border-radius: 6px; padding: 2px 8px; font-size: 11px; color: var(--on-surface-variant); }
+.kb-item { background: var(--surface-white); border: 1px solid var(--outline-variant); border-radius: 10px; padding: 14px 16px; transition: all 0.15s; }
 .kb-item:hover { border-color: var(--primary); box-shadow: 0 2px 8px rgba(0,74,198,0.08); }
 .chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; background: var(--surface-container); color: var(--on-surface-variant); cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
 .chip:hover, .chip.selected { background: var(--primary); color: white; }
 .analytics-bar { height: 8px; border-radius: 4px; background: var(--primary); transition: width 0.6s ease; }
 .workflow-card { background: var(--surface-white); border: 1px solid var(--outline-variant); border-radius: 12px; padding: 18px 20px; cursor: pointer; transition: all 0.15s; }
 .workflow-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,74,198,0.1); transform: translateY(-1px); }
-.settings-section { background: var(--surface-white); border: 1px solid var(--outline-variant); border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; }
+
+.mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 39; }
+.mobile-header { display: none; align-items: center; padding: 12px 16px; background: white; border-bottom: 1px solid var(--outline-variant); gap: 12px; position: sticky; top: 0; z-index: 30; }
+.mobile-header-title { font-size: 16px; font-weight: 600; flex: 1; }
 </style>
 </head>
 <body>
-<div id="app" style="display:flex; height:100vh; overflow:hidden;">
-  <div class="sidebar" id="sidebar">
+<div id="app" style="display:flex;height:100vh;overflow:hidden;">
+  <!-- 移动端遮罩 -->
+  <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
+  <!-- 移动端顶部导航栏 -->
+  <div class="mobile-header" id="mobileHeader">
+    <button onclick="openSidebar()" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;">
+      <span class="material-symbols-outlined" style="font-size:24px;color:var(--on-surface);">menu</span>
+    </button>
+    <div style="width:28px;height:28px;background:var(--primary);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+      <span class="material-symbols-outlined" style="color:white;font-size:15px;">psychology</span>
+    </div>
+    <span class="mobile-header-title" id="mobilePageTitle">AI 政策顾问</span>
+    <span class="material-symbols-outlined" style="color:var(--on-surface-variant);font-size:20px;" id="mobileRoleIcon">person</span>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
     <div style="padding:20px 16px 12px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
         <div style="width:36px;height:36px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;">
           <span class="material-symbols-outlined" style="color:white;font-size:18px;">psychology</span>
         </div>
         <div>
-          <div style="font-size:14px;font-weight:700;color:var(--on-surface);">HR Copilot</div>
+          <div style="font-size:14px;font-weight:700;">HR Copilot</div>
           <div style="font-size:11px;color:var(--on-surface-variant);">AI 政策顾问</div>
         </div>
       </div>
-      <div id="roleSwitcher" class="role-badge" onclick="toggleRole()" style="width:100%;justify-content:center;margin-bottom:16px;">
+      <div class="role-badge" onclick="toggleRole()">
         <span class="material-symbols-outlined" style="font-size:16px;" id="roleIcon">person</span>
         <span id="roleLabel">员工模式</span>
         <span class="material-symbols-outlined" style="font-size:14px;margin-left:auto;">unfold_more</span>
@@ -106,16 +120,20 @@ input, textarea, select { font-family: 'Inter', sans-serif; }
       </div>
       <div style="padding:10px 12px 0;">
         <div style="font-size:11px;color:var(--on-surface-variant);">当前用户</div>
-        <div style="font-size:13px;font-weight:500;color:var(--on-surface);" id="currentUser">张明 · 技术部</div>
+        <div style="font-size:13px;font-weight:500;" id="currentUser">张明 · 技术部</div>
       </div>
     </div>
   </div>
-  <div style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+
+  <!-- MAIN -->
+  <div class="main-content" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
+
+    <!-- 员工：AI对话 -->
     <div class="page" id="page-chat">
       <div style="padding:16px 24px;background:white;border-bottom:1px solid var(--outline-variant);display:flex;align-items:center;">
         <div>
           <div style="font-size:18px;font-weight:600;">AI 政策顾问</div>
-          <div style="font-size:12px;color:var(--on-surface-variant);">基于知识库精准回答 · 所有回答可溯源</div>
+          <div style="font-size:12px;color:var(--on-surface-variant);">基于知识库精准回答 · 向量检索 · 所有回答可溯源</div>
         </div>
         <button class="btn-outline" style="margin-left:auto;" onclick="clearChat()">
           <span class="material-symbols-outlined" style="font-size:16px;">refresh</span> 新对话
@@ -134,31 +152,36 @@ input, textarea, select { font-family: 'Inter', sans-serif; }
             <div class="chip" onclick="sendSuggestion(this)">薪资构成是怎样的？</div>
             <div class="chip" onclick="sendSuggestion(this)">产假政策是什么？</div>
             <div class="chip" onclick="sendSuggestion(this)">报销流程如何办理？</div>
-            <div class="chip" onclick="sendSuggestion(this)">试用期转正流程？</div>
+            <div class="chip" onclick="sendSuggestion(this)">考勤制度是什么？</div>
           </div>
         </div>
       </div>
       <div style="padding:16px 24px;background:white;border-top:1px solid var(--outline-variant);">
         <div style="display:flex;gap:12px;max-width:800px;margin:0 auto;">
-          <textarea id="chatInput" placeholder="输入您的 HR 政策问题..." style="flex:1;border:1.5px solid var(--outline-variant);border-radius:12px;padding:12px 16px;font-size:14px;resize:none;outline:none;line-height:1.5;min-height:46px;max-height:120px;transition:border-color 0.2s;" rows="1" onkeydown="handleChatKey(event)" oninput="autoResize(this)" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--outline-variant)'"></textarea>
+          <textarea id="chatInput" placeholder="输入您的 HR 政策问题..." rows="1"
+            style="flex:1;border:1.5px solid var(--outline-variant);border-radius:12px;padding:12px 16px;font-size:14px;resize:none;outline:none;line-height:1.5;min-height:46px;max-height:120px;transition:border-color 0.2s;font-family:Inter,sans-serif;"
+            onkeydown="handleChatKey(event)" oninput="autoResize(this)"
+            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--outline-variant)'"></textarea>
           <button class="btn-primary" onclick="sendChat()" style="align-self:flex-end;height:46px;padding:0 20px;">
             <span class="material-symbols-outlined" style="font-size:18px;">send</span>
           </button>
         </div>
-        <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--on-surface-variant);">所有回答均基于公司知识库 · 请勿输入个人敏感信息</div>
+        <div style="text-align:center;margin-top:8px;font-size:11px;color:var(--on-surface-variant);">所有回答均基于知识库向量检索 · DeepSeek AI 生成</div>
       </div>
     </div>
+
+    <!-- 员工：业务办理 -->
     <div class="page" id="page-workflow">
       <div style="padding:20px 24px;background:white;border-bottom:1px solid var(--outline-variant);">
         <div style="font-size:18px;font-weight:600;">业务办理中心</div>
         <div style="font-size:12px;color:var(--on-surface-variant);">快速发起各类 HR 业务申请</div>
       </div>
       <div style="flex:1;overflow-y:auto;padding:24px;">
-        <div style="max-width:1000px;">
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;" id="workflowGrid"></div>
-        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:16px;max-width:1000px;" id="workflowGrid"></div>
       </div>
     </div>
+
+    <!-- 员工：我的申请 -->
     <div class="page" id="page-myrecords">
       <div style="padding:20px 24px;background:white;border-bottom:1px solid var(--outline-variant);">
         <div style="font-size:18px;font-weight:600;">我的申请记录</div>
@@ -168,20 +191,25 @@ input, textarea, select { font-family: 'Inter', sans-serif; }
         <div id="myRecordsList" style="max-width:900px;"></div>
       </div>
     </div>
+
+    <!-- HR：知识库 -->
     <div class="page" id="page-kb">
       <div style="padding:20px 24px;background:white;border-bottom:1px solid var(--outline-variant);display:flex;align-items:center;justify-content:space-between;">
         <div>
           <div style="font-size:18px;font-weight:600;">知识库管理</div>
-          <div style="font-size:12px;color:var(--on-surface-variant);">维护 HR 政策文档，支撑 AI 精准回答</div>
+          <div style="font-size:12px;color:var(--on-surface-variant);">维护 HR 政策文档 · 自动同步向量库</div>
         </div>
         <button class="btn-primary" onclick="showAddKBModal()">
-          <span class="material-symbols-outlined" style="font-size:16px;">add</span> 添加知识条目
+          <span class="material-symbols-outlined" style="font-size:16px;">add</span> 添加条目
         </button>
       </div>
       <div style="flex:1;overflow-y:auto;padding:24px;">
         <div style="display:flex;gap:12px;margin-bottom:20px;">
-          <input type="text" id="kbSearch" placeholder="搜索知识库..." style="flex:1;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 14px;font-size:14px;outline:none;" oninput="filterKB()" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--outline-variant)'"/>
-          <select id="kbCategoryFilter" style="border:1px solid var(--outline-variant);border-radius:8px;padding:9px 14px;font-size:14px;outline:none;background:white;" onchange="filterKB()">
+          <input type="text" id="kbSearch" placeholder="搜索知识库..." oninput="renderKB()"
+            style="flex:1;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 14px;font-size:14px;outline:none;"
+            onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--outline-variant)'"/>
+          <select id="kbCategoryFilter" onchange="renderKB()"
+            style="border:1px solid var(--outline-variant);border-radius:8px;padding:9px 14px;font-size:14px;outline:none;background:white;">
             <option value="">全部分类</option>
             <option value="假期">假期政策</option>
             <option value="薪资">薪资福利</option>
@@ -195,6 +223,8 @@ input, textarea, select { font-family: 'Inter', sans-serif; }
         <div id="kbList" style="display:flex;flex-direction:column;gap:12px;max-width:900px;"></div>
       </div>
     </div>
+
+    <!-- HR：审批 -->
     <div class="page" id="page-approval">
       <div style="padding:20px 24px;background:white;border-bottom:1px solid var(--outline-variant);">
         <div style="font-size:18px;font-weight:600;">审批中心</div>
@@ -210,6 +240,8 @@ input, textarea, select { font-family: 'Inter', sans-serif; }
         <div id="approvalList" style="max-width:1000px;display:flex;flex-direction:column;gap:12px;"></div>
       </div>
     </div>
+
+    <!-- HR：统计 -->
     <div class="page" id="page-analytics">
       <div style="padding:20px 24px;background:white;border-bottom:1px solid var(--outline-variant);">
         <div style="font-size:18px;font-weight:600;">数据统计</div>
@@ -219,95 +251,118 @@ input, textarea, select { font-family: 'Inter', sans-serif; }
         <div id="analyticsContent" style="max-width:1000px;"></div>
       </div>
     </div>
+
   </div>
 </div>
-<div id="apiModal" class="modal-overlay" style="display:none;" onclick="closeApiModal(event)">
+
+<!-- Modal: API配置 -->
+<div id="apiModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeModal('apiModal')">
   <div class="modal-box">
     <div style="font-size:18px;font-weight:600;margin-bottom:4px;">AI 模型配置</div>
     <div style="font-size:13px;color:var(--on-surface-variant);margin-bottom:16px;">当前已接入 DeepSeek 大模型</div>
     <div style="background:var(--surface-low);border:1px solid var(--outline-variant);border-radius:10px;padding:14px 16px;margin-bottom:16px;">
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--on-surface-variant);">接入点</span><span style="font-weight:500;">api.deepseek.com</span></div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;"><span style="color:var(--on-surface-variant);">模型</span><span style="font-weight:500;">deepseek-v4-pro</span></div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;"><span style="color:var(--on-surface-variant);">状态</span><span style="color:#065f46;font-weight:600;">✅ 已配置</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;">
+        <span style="color:var(--on-surface-variant);">接入点</span><span style="font-weight:500;">api.deepseek.com</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;">
+        <span style="color:var(--on-surface-variant);">模型</span><span style="font-weight:500;">deepseek-v4-pro</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;">
+        <span style="color:var(--on-surface-variant);">数据库</span><span style="font-weight:500;color:#065f46;">✅ SQLite + ChromaDB</span>
+      </div>
     </div>
-    <label style="font-size:13px;font-weight:500;display:block;margin-bottom:6px;">更换 API Key（可选）</label>
-    <input type="password" id="apiKeyInput" placeholder="sk-..." style="width:100%;border:1px solid var(--outline-variant);border-radius:8px;padding:10px 14px;font-size:14px;outline:none;margin-bottom:8px;"/>
-    <div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:16px;">留空则继续使用已配置的 API Key</div>
-    <div style="display:flex;gap:10px;justify-content:flex-end;">
-      <button class="btn-outline" onclick="closeApiModal()">取消</button>
-      <button class="btn-primary" onclick="saveApiKey()">保存</button>
+    <div style="display:flex;justify-content:flex-end;">
+      <button class="btn-primary" onclick="closeModal('apiModal')">关闭</button>
     </div>
   </div>
 </div>
-<div id="applyModal" class="modal-overlay" style="display:none;" onclick="closeApplyModal(event)">
+
+<!-- Modal: 发起申请 -->
+<div id="applyModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeModal('applyModal')">
   <div class="modal-box" style="max-width:520px;" id="applyModalContent"></div>
 </div>
-<div id="kbModal" class="modal-overlay" style="display:none;" onclick="closeKBModal(event)">
+
+<!-- Modal: 知识库编辑 -->
+<div id="kbModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this)closeModal('kbModal')">
   <div class="modal-box" id="kbModalContent"></div>
 </div>
-<div id="approvalModal" class="modal-overlay" style="display:none;" onclick="closeApprovalModal(event)">
-  <div class="modal-box" style="max-width:600px;" id="approvalModalContent"></div>
-</div>
-<script>
 
-// ===== API 工具函数 ===== // 缓存 KB 条目，供编辑用
+<script>
+// ===== 全局配置 =====
 const API_BASE = '/hr-copilot/api';
-async function apiFetch(path, opts = {}) {
+const STATE = {
+  role: 'employee',
+  chatHistory: [],
+  approvalFilter: 'all',
+  sessionId: null,
+};
+
+// ===== API 请求 =====
+async function api(path, opts = {}) {
   const res = await fetch(API_BASE + path, {
     method: opts.method || 'GET',
     headers: { 'Content-Type': 'application/json' },
     body: opts.body ? JSON.stringify(opts.body) : undefined,
   });
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(txt || res.status);
-  }
+  if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
-const STATE = { role: 'employee', apiKey: 'sk-7a360aee1efe48148a982850d733cfe2', chatHistory: [], currentApprovalFilter: 'all', sessionId: null };
-const AI_CONFIG = { baseUrl: 'https://api.deepseek.com/v1/chat/completions', model: 'deepseek-v4-pro' };
-function loadData(key, def) { try { return JSON.parse(localStorage.getItem('hr_' + key)) || def; } catch { return def; } }
-function saveData(key, val) { localStorage.setItem('hr_' + key, JSON.stringify(val)); }
-function initKB() {
-  if (loadData('kb', null)) return;
-  saveData('kb', [
-    { id: 1, title: '年假政策', category: '假期', content: '员工入职满1年可享有5天带薪年假，满3年享有10天，满5年享有15天，最高上限为15天。年假需提前3个工作日申请，经直属上级审批后方可休假。年假当年有效，不可跨年累计。', updatedAt: '2025-03-01', author: 'HR部门' },
-    { id: 2, title: '病假政策', category: '假期', content: '员工因病需休假，须提供医院诊断证明。病假前3天工资全额发放，3天以上按80%发放。连续病假超过30天，需办理病假手续并提交相关证明材料。', updatedAt: '2025-02-15', author: 'HR部门' },
-    { id: 3, title: '产假政策', category: '假期', content: '女员工顺产产假98天，剖腹产增加15天，生育多胞胎每增加一个婴儿增加15天。男员工陪产假15天。产假期间工资按正常标准发放。', updatedAt: '2025-01-20', author: 'HR部门' },
-    { id: 4, title: '薪资构成与发放', category: '薪资', content: '薪资由基本工资、绩效奖金、津贴三部分构成。每月15日发放上月工资，如遇节假日提前发放。绩效奖金按季度考核结果发放，考核优秀、良好、合格分别对应120%、100%、80%的绩效系数。', updatedAt: '2025-04-01', author: 'HR部门' },
-    { id: 5, title: '在职证明申请流程', category: '证明', content: '在职证明申请通过HR系统提交，填写用途说明。HR在2个工作日内出具，加盖公司公章。证明内容包含：姓名、职位、部门、入职时间、公司信息。紧急情况可联系HR直接处理。', updatedAt: '2025-03-10', author: 'HR部门' },
-    { id: 6, title: '收入证明申请流程', category: '证明', content: '收入证明申请需提前5个工作日申请。需提供申请用途（如贷款、签证等）。内容包含月均税前收入、社保缴纳情况。收入证明有效期3个月，超期需重新申请。', updatedAt: '2025-03-10', author: 'HR部门' },
-    { id: 7, title: '报销政策与流程', category: '报销', content: '费用报销须在发生后30天内提交，超期不予报销。差旅费需提前申请，机票购买须符合公司差旅标准（经济舱）。报销凭证须为正规发票，金额超过5000元需部门总监审批。', updatedAt: '2025-04-05', author: '财务部门' },
-    { id: 8, title: '考勤制度', category: '考勤', content: '工作时间：周一至周五 9:00-18:00，午休12:00-13:00。弹性打卡时间：9:00-9:30，超过9:30视为迟到。每月允许3次迟到/早退，超过3次扣除相应绩效分。远程办公需提前申请并获批。', updatedAt: '2025-02-01', author: 'HR部门' },
-    { id: 9, title: '合同续签流程', category: '合同', content: '劳动合同到期前60天，HR将通知员工续签。续签意向须在到期前30天确认。第一次固定期限合同为1年，第二次为3年，第三次起签订无固定期限合同。', updatedAt: '2025-01-15', author: 'HR部门' },
-    { id: 10, title: '婚假政策', category: '假期', content: '员工结婚可享有婚假3天，双方均为晚婚（男25周岁、女23周岁以上）可享有额外10天晚婚假。婚假须在领取结婚证后1年内使用，需提前7天申请并提供结婚证复印件。', updatedAt: '2025-01-10', author: 'HR部门' },
-  ]);
+// ===== 工具函数 =====
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-function initApplications() {
-  if (loadData('applications', null)) return;
-  saveData('applications', [
-    { id: 'APP001', type: '在职证明申请', applicant: '张明', dept: '技术部', status: 'pending', submitAt: '2025-06-10 10:30', detail: { reason: '银行贷款用途', urgency: '普通' } },
-    { id: 'APP002', type: '年假申请', applicant: '李小花', dept: '市场部', status: 'approved', submitAt: '2025-06-08 14:20', approvedAt: '2025-06-09 09:00', detail: { startDate: '2025-06-20', endDate: '2025-06-22', days: 3, reason: '家庭旅游' } },
-    { id: 'APP003', type: '收入证明申请', applicant: '王大伟', dept: '销售部', status: 'pending', submitAt: '2025-06-11 09:00', detail: { reason: '购房贷款', urgency: '紧急' } },
-    { id: 'APP004', type: '薪资异常申诉', applicant: '陈小静', dept: '运营部', status: 'processing', submitAt: '2025-06-09 16:00', detail: { month: '2025年5月', issue: '加班费计算有误', amount: '850元' } },
-  ]);
+function statusLabel(s) {
+  return { pending:'待审批', approved:'已通过', rejected:'已拒绝', processing:'处理中' }[s] || s;
 }
-// 数据由 FastAPI + SQLite 持久化，无需本地初始化
-const NAV_EMPLOYEE = [{ id: 'chat', icon: 'psychology', label: 'AI 政策顾问' },{ id: 'workflow', icon: 'assignment', label: '业务办理' },{ id: 'myrecords', icon: 'receipt_long', label: '我的申请' }];
-const NAV_HR = [{ id: 'kb', icon: 'library_books', label: '知识库管理' },{ id: 'approval', icon: 'approval', label: '审批中心' },{ id: 'analytics', icon: 'analytics', label: '数据统计' }];
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
+}
+function showToast(msg, type='success') {
+  const colors = { success:'#065f46', error:'var(--error)', warning:'#d97706', info:'var(--primary)' };
+  const icons  = { success:'check_circle', error:'error', warning:'warning', info:'info' };
+  const bg     = { success:'#f0fdf4', error:'#fef2f2', warning:'#fffbeb', info:'#eff6ff' };
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:24px;right:24px;background:${bg[type]};border:1px solid ${colors[type]}33;color:${colors[type]};padding:12px 18px;border-radius:10px;font-size:14px;font-weight:500;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);`;
+  t.innerHTML = `<span class="material-symbols-outlined" style="font-size:18px;">${icons[type]}</span>${msg}`;
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(()=>t.remove(),300); }, 3000);
+}
+
+// ===== 导航 =====
+const NAV_EMPLOYEE = [
+  { id:'chat',      icon:'psychology',    label:'AI 政策顾问' },
+  { id:'workflow',  icon:'assignment',    label:'业务办理' },
+  { id:'myrecords', icon:'receipt_long',  label:'我的申请' },
+];
+const NAV_HR = [
+  { id:'kb',        icon:'library_books', label:'知识库管理' },
+  { id:'approval',  icon:'approval',      label:'审批中心' },
+  { id:'analytics', icon:'analytics',     label:'数据统计' },
+];
+
 function toggleRole() {
   STATE.role = STATE.role === 'employee' ? 'hr' : 'employee';
-  document.getElementById('roleIcon').textContent = STATE.role === 'employee' ? 'person' : 'manage_accounts';
-  document.getElementById('roleLabel').textContent = STATE.role === 'employee' ? '员工模式' : 'HR 管理模式';
+  document.getElementById('roleIcon').textContent    = STATE.role === 'employee' ? 'person' : 'manage_accounts';
+  document.getElementById('roleLabel').textContent   = STATE.role === 'employee' ? '员工模式' : 'HR 管理模式';
   document.getElementById('currentUser').textContent = STATE.role === 'employee' ? '张明 · 技术部' : '王芳 · HR部门';
+  const mobileIcon = document.getElementById('mobileRoleIcon');
+  if (mobileIcon) mobileIcon.textContent = STATE.role === 'employee' ? 'person' : 'manage_accounts';
   renderNav();
   showPage(STATE.role === 'employee' ? 'chat' : 'kb');
 }
+
 function renderNav() {
   const items = STATE.role === 'employee' ? NAV_EMPLOYEE : NAV_HR;
-  document.getElementById('navMenu').innerHTML = items.map(item => `<div class="nav-item" id="nav-${item.id}" onclick="showPage('${item.id}')"><span class="material-symbols-outlined">${item.icon}</span><span>${item.label}</span></div>`).join('');
+  document.getElementById('navMenu').innerHTML = items.map(item =>
+    `<div class="nav-item" id="nav-${item.id}" onclick="showPage('${item.id}')">
+      <span class="material-symbols-outlined">${item.icon}</span>
+      <span>${item.label}</span>
+    </div>`
+  ).join('');
 }
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -315,237 +370,498 @@ function showPage(id) {
   if (page) page.classList.add('active');
   const nav = document.getElementById('nav-' + id);
   if (nav) nav.classList.add('active');
-  if (id === 'workflow') renderWorkflow();
+  if (id === 'workflow')  renderWorkflow();
   if (id === 'myrecords') renderMyRecords();
-  if (id === 'kb') renderKB();
-  if (id === 'approval') renderApproval();
+  if (id === 'kb')        renderKB();
+  if (id === 'approval')  renderApproval();
   if (id === 'analytics') renderAnalytics();
+  // 移动端：关闭侧边栏 + 更新顶栏标题
+  if (isMobile()) {
+    closeSidebar();
+    const allNav = [...NAV_EMPLOYEE, ...NAV_HR];
+    const item = allNav.find(n => n.id === id);
+    if (item) document.getElementById('mobilePageTitle').textContent = item.label;
+  }
 }
+
+function showApiConfig() {
+  document.getElementById('apiModal').style.display = 'flex';
+}
+
+// ===== AI 对话 =====
 let isThinking = false;
-function handleChatKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
-function sendSuggestion(el) { document.getElementById('chatInput').value = el.textContent; sendChat(); }
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+function sendSuggestion(el) {
+  document.getElementById('chatInput').value = el.textContent;
+  sendChat();
+}
 function clearChat() {
   STATE.chatHistory = [];
-  document.getElementById('chatMessages').innerHTML = `<div style="text-align:center;padding:40px 0;"><div style="width:56px;height:56px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;"><span class="material-symbols-outlined" style="color:white;font-size:28px;">psychology</span></div><div style="font-size:20px;font-weight:600;margin-bottom:8px;">您好，我是 HR 政策顾问</div><div style="font-size:14px;color:var(--on-surface-variant);max-width:400px;margin:0 auto;line-height:1.6;">我可以帮您查询 HR 政策、了解业务流程，并引导您完成各类业务申请。</div><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px;"><div class="chip" onclick="sendSuggestion(this)">我想请年假，能请几天？</div><div class="chip" onclick="sendSuggestion(this)">如何申请在职证明？</div><div class="chip" onclick="sendSuggestion(this)">薪资构成是怎样的？</div><div class="chip" onclick="sendSuggestion(this)">产假政策是什么？</div></div></div>`;
+  STATE.sessionId = null;
+  document.getElementById('chatMessages').innerHTML = `
+    <div style="text-align:center;padding:40px 0;">
+      <div style="width:56px;height:56px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:16px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:16px;">
+        <span class="material-symbols-outlined" style="color:white;font-size:28px;">psychology</span>
+      </div>
+      <div style="font-size:20px;font-weight:600;margin-bottom:8px;">您好，我是 HR 政策顾问</div>
+      <div style="font-size:14px;color:var(--on-surface-variant);max-width:400px;margin:0 auto;line-height:1.6;">我可以帮您查询 HR 政策、了解业务流程，并引导您完成各类业务申请。</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:24px;">
+        <div class="chip" onclick="sendSuggestion(this)">我想请年假，能请几天？</div>
+        <div class="chip" onclick="sendSuggestion(this)">如何申请在职证明？</div>
+        <div class="chip" onclick="sendSuggestion(this)">薪资构成是怎样的？</div>
+        <div class="chip" onclick="sendSuggestion(this)">产假政策是什么？</div>
+      </div>
+    </div>`;
 }
+
 async function sendChat() {
   if (isThinking) return;
   const input = document.getElementById('chatInput');
   const question = input.value.trim();
   if (!question) return;
   input.value = ''; input.style.height = 'auto';
-  // API已内置配置
+
   const msgs = document.getElementById('chatMessages');
-  appendUserBubble(msgs, question);
-  STATE.chatHistory.push({ role: 'user', content: question });
-  isThinking = true;
-  const thinkingId = 'thinking-' + Date.now();
-  msgs.innerHTML += `<div id="${thinkingId}" style="display:flex;align-items:flex-start;gap:10px;"><div style="width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-outlined" style="color:white;font-size:16px;">psychology</span></div><div class="chat-bubble-ai"><div class="thinking-dots" style="color:var(--secondary);">AI 正在思考<span>.</span><span>.</span><span>.</span></div></div></div>`;
+  // 用户气泡
+  const userDiv = document.createElement('div');
+  userDiv.style.cssText = 'display:flex;justify-content:flex-end;';
+  userDiv.innerHTML = `<div class="chat-bubble-user">${esc(question)}</div>`;
+  msgs.appendChild(userDiv);
   msgs.scrollTop = msgs.scrollHeight;
+
+  STATE.chatHistory.push({ role:'user', content: question });
+
+  // 思考中气泡
+  isThinking = true;
+  const thinkId = 'think-' + Date.now();
+  const thinkDiv = document.createElement('div');
+  thinkDiv.id = thinkId;
+  thinkDiv.style.cssText = 'display:flex;align-items:flex-start;gap:10px;';
+  thinkDiv.innerHTML = `
+    <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <span class="material-symbols-outlined" style="color:white;font-size:16px;">psychology</span>
+    </div>
+    <div class="chat-bubble-ai">
+      <div class="thinking-dots" style="color:var(--secondary);">AI 正在检索知识库<span>.</span><span>.</span><span>.</span></div>
+    </div>`;
+  msgs.appendChild(thinkDiv);
+  msgs.scrollTop = msgs.scrollHeight;
+
   try {
-    const kb = loadData('kb', []);
-    const kbContext = kb.map(k => `【${k.title}（${k.category}）】\n${k.content}`).join('\n\n---\n\n');
-    const systemPrompt = `你是一个企业HR政策顾问AI，名为"HR Copilot"。你只能基于以下知识库内容回答员工的HR政策问题。\n\n严格规则：\n1. 必须基于知识库内容回答，禁止自由编造\n2. 如果知识库中没有相关信息，必须回复："该问题暂未收录在知识库中，请联系 HR 进一步确认"\n3. 每个回答末尾必须注明来源，格式：【来源：《政策名称》】\n4. 回答要清晰简洁，使用中文\n\n知识库内容：\n${kbContext}\n\n业务卡片触发规则（在回答末尾附加JSON，以|||ACTION:{开头）：\n- 请假相关 → {"type":"action","title":"请假申请","icon":"event_available","desc":"在线提交请假申请，经上级审批后生效","time":"1个工作日","button":"立即申请"}\n- 在职证明 → {"type":"action","title":"在职证明申请","icon":"badge","desc":"HR在2个工作日内出具证明","time":"2个工作日","button":"立即申请"}\n- 收入证明 → {"type":"action","title":"收入证明申请","icon":"account_balance_wallet","desc":"需提前5个工作日申请","time":"3个工作日","button":"立即申请"}\n- 薪资查询 → {"type":"info","title":"薪资查询","icon":"payments","desc":"查看薪资明细与发放记录","button":"立即查看"}\n- 考勤查询 → {"type":"info","title":"考勤记录","icon":"schedule","desc":"查看打卡与考勤记录","button":"立即查看"}\n- 薪资/考勤异常 → {"type":"alert","title":"提交申诉","icon":"report_problem","desc":"对薪资或考勤异常提出申诉","time":"3个工作日","button":"提交申诉"}`;
-    // 调用后端 RAG 接口（向量检索 + DeepSeek）
-    const chatResp = await apiFetch('/chat', { method:'POST', body:{ question, session_id: STATE.sessionId }});
-    STATE.sessionId = chatResp.session_id;
-    const fullReply = chatResp.answer;
-    STATE.chatHistory.push({ role: 'assistant', content: fullReply });
-    let replyText = fullReply, actionCard = chatResp.action_card || null;
-    // 显示检索来源数量
-    if (chatResp.retrieved_count > 0) {
-      replyText += '\n\n';
+    const result = await api('/chat', {
+      method: 'POST',
+      body: { question, session_id: STATE.sessionId }
+    });
+    STATE.sessionId = result.session_id;
+    STATE.chatHistory.push({ role:'assistant', content: result.answer });
+
+    document.getElementById(thinkId)?.remove();
+
+    // AI 气泡
+    let htmlText = esc(result.answer)
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br/>')
+      .replace(/【来源：《(.+?)》】/g, '<span class="source-tag"><span class="material-symbols-outlined" style="font-size:11px;">menu_book</span>$1</span>');
+
+    // 来源标签
+    let sourcesHtml = '';
+    if (result.sources && result.sources.length > 0) {
+      sourcesHtml = `<div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:4px;">
+        <span style="font-size:11px;color:var(--on-surface-variant);margin-right:4px;">检索来源：</span>
+        ${result.sources.map(s => `<span class="source-tag"><span class="material-symbols-outlined" style="font-size:11px;">menu_book</span>${esc(s)}</span>`).join('')}
+      </div>`;
     }
-    document.getElementById(thinkingId)?.remove();
-    appendAIBubble(msgs, replyText, actionCard);
+
+    // 业务卡片
+    let cardHtml = '';
+    if (result.action_card) {
+      const c = result.action_card;
+      const cls = c.type === 'action' ? 'action-type' : c.type === 'info' ? 'info-type' : 'alert-type';
+      const color = c.type === 'action' ? 'var(--primary)' : c.type === 'info' ? 'var(--secondary)' : 'var(--error)';
+      const btnFn = c.type !== 'info' ? `triggerWorkflow('${esc(c.title)}')` : `showPage('myrecords')`;
+      cardHtml = `
+        <div class="action-card ${cls}">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="material-symbols-outlined" style="color:${color};">${c.icon||'info'}</span>
+            <span style="font-size:14px;font-weight:600;">${esc(c.title)}</span>
+          </div>
+          ${c.desc ? `<div style="font-size:13px;color:var(--on-surface-variant);margin-bottom:8px;">${esc(c.desc)}</div>` : ''}
+          ${c.time ? `<div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:10px;"><span class="material-symbols-outlined" style="font-size:13px;">schedule</span> 处理时效：${esc(c.time)}</div>` : ''}
+          <button class="btn-primary" style="font-size:12px;padding:6px 14px;" onclick="${btnFn}">${esc(c.button||'立即办理')}</button>
+        </div>`;
+    }
+
+    const aiDiv = document.createElement('div');
+    aiDiv.style.cssText = 'display:flex;align-items:flex-start;gap:10px;';
+    aiDiv.innerHTML = `
+      <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+        <span class="material-symbols-outlined" style="color:white;font-size:16px;">psychology</span>
+      </div>
+      <div style="flex:1;max-width:85%;">
+        <div class="chat-bubble-ai">${htmlText}${sourcesHtml}</div>
+        ${cardHtml}
+      </div>`;
+    msgs.appendChild(aiDiv);
     msgs.scrollTop = msgs.scrollHeight;
+
   } catch(err) {
-    document.getElementById(thinkingId)?.remove();
-    appendAIBubble(msgs, `⚠️ 请求失败：${err.message}`, null);
+    document.getElementById(thinkId)?.remove();
+    const errDiv = document.createElement('div');
+    errDiv.style.cssText = 'display:flex;align-items:flex-start;gap:10px;';
+    errDiv.innerHTML = `
+      <div style="width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <span class="material-symbols-outlined" style="color:white;font-size:16px;">psychology</span>
+      </div>
+      <div class="chat-bubble-ai" style="color:var(--error);">⚠️ 请求失败：${esc(err.message)}</div>`;
+    msgs.appendChild(errDiv);
     msgs.scrollTop = msgs.scrollHeight;
   }
   isThinking = false;
 }
-function appendUserBubble(container, text) {
-  const div = document.createElement('div');
-  div.style.cssText = 'display:flex;justify-content:flex-end;';
-  div.innerHTML = `<div class="chat-bubble-user">${escapeHTML(text)}</div>`;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-function appendAIBubble(container, text, actionCard) {
-  let htmlText = escapeHTML(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>').replace(/【来源：《(.+?)》】/g, '<span class="source-tag"><span class="material-symbols-outlined" style="font-size:11px;">menu_book</span>$1</span>');
-  let cardHTML = '';
-  if (actionCard) {
-    const cardClass = actionCard.type === 'action' ? 'action-type' : actionCard.type === 'info' ? 'info-type' : 'alert-type';
-    const btnText = actionCard.button || '立即办理';
-    const btnAction = actionCard.type !== 'info' ? `onclick="triggerAction('${actionCard.title}')"` : `onclick="showPage('myrecords')"`;
-    cardHTML = `<div class="action-card ${cardClass}" style="margin-top:12px;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span class="material-symbols-outlined" style="color:${actionCard.type==='action'?'var(--primary)':actionCard.type==='info'?'var(--secondary)':'var(--error)'};">${actionCard.icon||'info'}</span><span style="font-size:14px;font-weight:600;">${escapeHTML(actionCard.title)}</span></div>${actionCard.desc?`<div style="font-size:13px;color:var(--on-surface-variant);margin-bottom:8px;">${escapeHTML(actionCard.desc)}</div>`:''}${actionCard.time?`<div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:10px;"><span class="material-symbols-outlined" style="font-size:13px;">schedule</span> 处理时效：${escapeHTML(actionCard.time)}</div>`:''}<button class="btn-primary" style="font-size:12px;padding:6px 14px;" ${btnAction}>${btnText}</button></div>`;
-  }
-  const div = document.createElement('div');
-  div.style.cssText = 'display:flex;align-items:flex-start;gap:10px;';
-  div.innerHTML = `<div style="width:32px;height:32px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;"><span class="material-symbols-outlined" style="color:white;font-size:16px;">psychology</span></div><div style="flex:1;max-width:85%;"><div class="chat-bubble-ai">${htmlText}</div>${cardHTML}</div>`;
-  container.appendChild(div);
-}
-function triggerAction(title) {
+
+function triggerWorkflow(title) {
   showPage('workflow');
-  setTimeout(() => { document.querySelectorAll('.workflow-card').forEach(c => { if (c.textContent.includes(title.replace('申请',''))) { c.style.borderColor='var(--primary)'; c.scrollIntoView({behavior:'smooth'}); setTimeout(()=>{c.style.borderColor='';},2000); } }); }, 300);
+  setTimeout(() => {
+    document.querySelectorAll('.workflow-card').forEach(c => {
+      if (c.querySelector('.wf-title')?.textContent?.includes(title.replace('申请',''))) {
+        c.style.borderColor = 'var(--primary)';
+        c.scrollIntoView({ behavior:'smooth' });
+        setTimeout(() => { c.style.borderColor = ''; }, 2000);
+      }
+    });
+  }, 300);
 }
+
+// ===== 业务办理 =====
 const WORKFLOWS = [
-  { id: 'leave', icon: 'event_available', title: '请假申请', desc: '年假、病假、事假等各类假期申请', category: '假期', time: '1个工作日', fields: [{ name:'leaveType',label:'请假类型',type:'select',options:['年假','病假','事假','婚假','产假','陪产假']},{ name:'startDate',label:'开始日期',type:'date'},{ name:'endDate',label:'结束日期',type:'date'},{ name:'reason',label:'请假原因',type:'textarea'}]},
-  { id: 'cert_employment', icon: 'badge', title: '在职证明申请', desc: '用于银行贷款、签证申请等用途', category: '证明', time: '2个工作日', fields: [{ name:'purpose',label:'证明用途',type:'text',placeholder:'如：银行贷款、租房'},{ name:'recipient',label:'收件机构',type:'text',placeholder:'如：工商银行北京分行'},{ name:'urgency',label:'紧急程度',type:'select',options:['普通','紧急']}]},
-  { id: 'cert_income', icon: 'account_balance_wallet', title: '收入证明申请', desc: '用于贷款、信用卡办理等用途', category: '证明', time: '3个工作日', fields: [{ name:'purpose',label:'证明用途',type:'text',placeholder:'如：房贷申请'},{ name:'recipient',label:'收件机构',type:'text',placeholder:'如：建设银行上海分行'},{ name:'period',label:'薪资周期',type:'select',options:['最近3个月','最近6个月','最近12个月']}]},
-  { id: 'reimbursement', icon: 'receipt', title: '费用报销申请', desc: '差旅费、餐费、交通费等报销', category: '报销', time: '5个工作日', fields: [{ name:'type',label:'报销类型',type:'select',options:['差旅费','餐费','交通费','办公用品','其他']},{ name:'amount',label:'报销金额（元）',type:'number',placeholder:'0.00'},{ name:'date',label:'发生日期',type:'date'},{ name:'reason',label:'报销说明',type:'textarea'}]},
-  { id: 'appeal_salary', icon: 'report_problem', title: '薪资异常申诉', desc: '对薪资计算有疑问时提交申诉', category: '申诉', time: '3个工作日', alert: true, fields: [{ name:'month',label:'申诉月份',type:'month'},{ name:'issue',label:'问题描述',type:'textarea',placeholder:'请描述具体异常情况'},{ name:'amount',label:'涉及金额（元）',type:'number',placeholder:'0'}]},
-  { id: 'appeal_attendance', icon: 'schedule', title: '考勤异常申诉', desc: '打卡异常、漏打卡等情况申诉', category: '申诉', time: '1个工作日', alert: true, fields: [{ name:'date',label:'异常日期',type:'date'},{ name:'type',label:'异常类型',type:'select',options:['漏打卡','系统错误','其他']},{ name:'reason',label:'说明',type:'textarea'}]},
+  { id:'leave',            icon:'event_available',       title:'请假申请',     desc:'年假、病假、事假等各类假期申请',   category:'假期', time:'1个工作日',
+    fields:[{n:'leaveType',l:'请假类型',t:'select',opts:['年假','病假','事假','婚假','产假','陪产假']},{n:'startDate',l:'开始日期',t:'date'},{n:'endDate',l:'结束日期',t:'date'},{n:'reason',l:'请假原因',t:'textarea'}] },
+  { id:'cert_employment',  icon:'badge',                 title:'在职证明申请',  desc:'用于银行贷款、签证申请等用途',     category:'证明', time:'2个工作日',
+    fields:[{n:'purpose',l:'证明用途',t:'text',ph:'如：银行贷款、租房'},{n:'recipient',l:'收件机构',t:'text',ph:'如：工商银行北京分行'},{n:'urgency',l:'紧急程度',t:'select',opts:['普通','紧急']}] },
+  { id:'cert_income',      icon:'account_balance_wallet', title:'收入证明申请', desc:'用于贷款、信用卡办理等用途',       category:'证明', time:'3个工作日',
+    fields:[{n:'purpose',l:'证明用途',t:'text',ph:'如：房贷申请'},{n:'recipient',l:'收件机构',t:'text',ph:'如：建设银行上海分行'},{n:'period',l:'薪资周期',t:'select',opts:['最近3个月','最近6个月','最近12个月']}] },
+  { id:'reimbursement',    icon:'receipt',               title:'费用报销申请',  desc:'差旅费、餐费、交通费等报销',       category:'报销', time:'5个工作日',
+    fields:[{n:'type',l:'报销类型',t:'select',opts:['差旅费','餐费','交通费','办公用品','其他']},{n:'amount',l:'报销金额（元）',t:'number',ph:'0.00'},{n:'date',l:'发生日期',t:'date'},{n:'reason',l:'报销说明',t:'textarea'}] },
+  { id:'appeal_salary',    icon:'report_problem',        title:'薪资异常申诉',  desc:'对薪资计算有疑问时提交申诉',       category:'申诉', time:'3个工作日', alert:true,
+    fields:[{n:'month',l:'申诉月份',t:'month'},{n:'issue',l:'问题描述',t:'textarea',ph:'请描述具体异常情况'},{n:'amount',l:'涉及金额（元）',t:'number',ph:'0'}] },
+  { id:'appeal_attendance',icon:'schedule',              title:'考勤异常申诉',  desc:'打卡异常、漏打卡等情况申诉',       category:'申诉', time:'1个工作日', alert:true,
+    fields:[{n:'date',l:'异常日期',t:'date'},{n:'type',l:'异常类型',t:'select',opts:['漏打卡','系统错误','其他']},{n:'reason',l:'说明',t:'textarea'}] },
 ];
+
 function renderWorkflow() {
-  document.getElementById('workflowGrid').innerHTML = WORKFLOWS.map(w => `<div class="workflow-card" onclick="showApplyModal('${w.id}')"><div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:40px;height:40px;border-radius:10px;background:${w.alert?'var(--error-container)':'var(--surface-container)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-symbols-outlined" style="color:${w.alert?'var(--error)':'var(--primary)'};">${w.icon}</span></div><div><div style="font-size:15px;font-weight:600;margin-bottom:4px;">${w.title}</div><div style="font-size:13px;color:var(--on-surface-variant);line-height:1.4;">${w.desc}</div></div></div><div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;"><div style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--on-surface-variant);"><span class="material-symbols-outlined" style="font-size:14px;">schedule</span> ${w.time}</div><span style="font-size:12px;background:var(--surface-container);padding:3px 8px;border-radius:6px;color:var(--on-surface-variant);">${w.category}</span></div></div>`).join('');
+  document.getElementById('workflowGrid').innerHTML = WORKFLOWS.map(w => `
+    <div class="workflow-card" onclick="showApplyModal('${w.id}')">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:10px;background:${w.alert?'var(--error-container)':'var(--surface-container)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <span class="material-symbols-outlined" style="color:${w.alert?'var(--error)':'var(--primary)'};">${w.icon}</span>
+        </div>
+        <div>
+          <div class="wf-title" style="font-size:15px;font-weight:600;margin-bottom:4px;">${w.title}</div>
+          <div style="font-size:13px;color:var(--on-surface-variant);line-height:1.4;">${w.desc}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;">
+        <div style="font-size:12px;color:var(--on-surface-variant);display:flex;align-items:center;gap:4px;">
+          <span class="material-symbols-outlined" style="font-size:14px;">schedule</span>${w.time}
+        </div>
+        <span style="font-size:12px;background:var(--surface-container);padding:3px 8px;border-radius:6px;color:var(--on-surface-variant);">${w.category}</span>
+      </div>
+    </div>`).join('');
 }
+
 function showApplyModal(wfId) {
   const wf = WORKFLOWS.find(w => w.id === wfId);
   if (!wf) return;
-  document.getElementById('applyModalContent').innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;"><div style="width:36px;height:36px;border-radius:8px;background:${wf.alert?'var(--error-container)':'var(--surface-container)'};display:flex;align-items:center;justify-content:center;"><span class="material-symbols-outlined" style="color:${wf.alert?'var(--error)':'var(--primary)'};">${wf.icon}</span></div><div style="font-size:17px;font-weight:600;">${wf.title}</div></div><div style="font-size:13px;color:var(--on-surface-variant);margin-bottom:20px;">${wf.desc} · 处理时效：${wf.time}</div><div id="applyFormFields" style="display:flex;flex-direction:column;gap:14px;">${wf.fields.map(f=>renderFormField(f)).join('')}</div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;"><button class="btn-outline" onclick="closeApplyModal()">取消</button><button class="btn-primary" onclick="submitApplication('${wfId}')"><span class="material-symbols-outlined" style="font-size:16px;">send</span> 提交申请</button></div>`;
+  const inputStyle = 'width:100%;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 12px;font-size:14px;outline:none;font-family:Inter,sans-serif;';
+  const fields = wf.fields.map(f => {
+    const label = `<label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">${f.l}</label>`;
+    if (f.t === 'select')   return `<div>${label}<select name="${f.n}" style="${inputStyle}background:white;">${f.opts.map(o=>`<option>${o}</option>`).join('')}</select></div>`;
+    if (f.t === 'textarea') return `<div>${label}<textarea name="${f.n}" placeholder="${f.ph||''}" rows="3" style="${inputStyle}resize:vertical;"></textarea></div>`;
+    return `<div>${label}<input type="${f.t}" name="${f.n}" placeholder="${f.ph||''}" style="${inputStyle}"/></div>`;
+  }).join('');
+  document.getElementById('applyModalContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+      <div style="width:36px;height:36px;border-radius:8px;background:${wf.alert?'var(--error-container)':'var(--surface-container)'};display:flex;align-items:center;justify-content:center;">
+        <span class="material-symbols-outlined" style="color:${wf.alert?'var(--error)':'var(--primary)'};">${wf.icon}</span>
+      </div>
+      <div style="font-size:17px;font-weight:600;">${wf.title}</div>
+    </div>
+    <div style="font-size:13px;color:var(--on-surface-variant);margin-bottom:20px;">${wf.desc} · 处理时效：${wf.time}</div>
+    <div id="applyFields" style="display:flex;flex-direction:column;gap:14px;">${fields}</div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;">
+      <button class="btn-outline" onclick="closeModal('applyModal')">取消</button>
+      <button class="btn-primary" onclick="submitApplication('${wfId}')">
+        <span class="material-symbols-outlined" style="font-size:16px;">send</span> 提交申请
+      </button>
+    </div>`;
   document.getElementById('applyModal').style.display = 'flex';
 }
-function renderFormField(f) {
-  const label = `<label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">${f.label}</label>`;
-  const s = 'width:100%;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 12px;font-size:14px;outline:none;';
-  if (f.type === 'select') return `<div>${label}<select name="${f.name}" style="${s}background:white;">${f.options.map(o=>`<option>${o}</option>`).join('')}</select></div>`;
-  if (f.type === 'textarea') return `<div>${label}<textarea name="${f.name}" placeholder="${f.placeholder||''}" rows="3" style="${s}resize:vertical;"></textarea></div>`;
-  return `<div>${label}<input type="${f.type}" name="${f.name}" placeholder="${f.placeholder||''}" style="${s}"/></div>`;
-}
+
 function submitApplication(wfId) {
   const wf = WORKFLOWS.find(w => w.id === wfId);
-  const fields = document.querySelectorAll('#applyFormFields [name]');
+  const fields = document.querySelectorAll('#applyFields [name]');
   const detail = {}; let valid = true;
-  fields.forEach(f => { if (!f.value && f.type !== 'textarea') { valid = false; f.style.borderColor = 'var(--error)'; } else { f.style.borderColor = 'var(--outline-variant)'; detail[f.name] = f.value; } });
+  fields.forEach(f => {
+    if (!f.value && f.type !== 'textarea') { valid = false; f.style.borderColor = 'var(--error)'; }
+    else { f.style.borderColor = 'var(--outline-variant)'; detail[f.name] = f.value; }
+  });
   if (!valid) { showToast('请填写所有必填项', 'error'); return; }
-  apiFetch('/applications', { method:'POST', body:{ type: wf.title, applicant:'张明', dept:'技术部', detail }})
-    .then(() => { closeApplyModal(); showToast('申请已提交成功！', 'success'); showPage('myrecords'); })
-    .catch(e => showToast('提交失败: ' + e.message, 'error'));
+  api('/applications', { method:'POST', body:{ type: wf.title, applicant:'张明', dept:'技术部', detail }})
+    .then(() => { closeModal('applyModal'); showToast('申请已提交成功！', 'success'); showPage('myrecords'); })
+    .catch(e => showToast('提交失败：' + e.message, 'error'));
 }
-function closeApplyModal(e) { if (e && e.target !== document.getElementById('applyModal')) return; document.getElementById('applyModal').style.display = 'none'; }
+
+// ===== 我的申请 =====
 function renderMyRecords() {
-  const container = document.getElementById('myRecordsList');
-  container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--on-surface-variant);">加载中...</div>';
-  apiFetch('/applications?applicant=张明')
+  const el = document.getElementById('myRecordsList');
+  el.innerHTML = '<div style="padding:20px;color:var(--on-surface-variant);">加载中...</div>';
+  api('/applications?applicant=张明')
     .then(apps => {
-      if (!apps.length) { container.innerHTML = '<div style="text-align:center;padding:60px;color:var(--on-surface-variant);">暂无申请记录</div>'; return; }
-      container.innerHTML = apps.map(a => `<div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:16px 20px;margin-bottom:12px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><div style="font-size:15px;font-weight:600;">${a.type}</div><span class="badge badge-${a.status}">${statusLabel(a.status)}</span></div><div style="font-size:13px;color:var(--on-surface-variant);">申请编号：${a.id} · 提交时间：${a.submit_at}</div>${a.approved_at?`<div style="font-size:13px;color:#065f46;margin-top:4px;">审批时间：${a.approved_at}</div>`:''}${a.reject_reason?`<div style="font-size:13px;color:var(--error);margin-top:4px;">拒绝原因：${a.reject_reason}</div>`:''}</div>`).join('');
-    }).catch(e => { container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--error);">加载失败</div>'; });
+      if (!apps.length) { el.innerHTML = '<div style="text-align:center;padding:60px;color:var(--on-surface-variant);">暂无申请记录</div>'; return; }
+      el.innerHTML = apps.map(a => `
+        <div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:16px 20px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <div style="font-size:15px;font-weight:600;">${esc(a.type)}</div>
+            <span class="badge badge-${a.status}">${statusLabel(a.status)}</span>
+          </div>
+          <div style="font-size:13px;color:var(--on-surface-variant);">申请编号：${esc(a.id)} · 提交时间：${esc(a.submit_at)}</div>
+          ${a.approved_at ? `<div style="font-size:13px;color:#065f46;margin-top:4px;">审批时间：${esc(a.approved_at)}</div>` : ''}
+          ${a.reject_reason ? `<div style="font-size:13px;color:var(--error);margin-top:4px;">拒绝原因：${esc(a.reject_reason)}</div>` : ''}
+        </div>`).join('');
+    })
+    .catch(() => { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--error);">加载失败，请刷新重试</div>'; });
 }
-function statusLabel(s) { return { pending: '待审批', approved: '已通过', rejected: '已拒绝', processing: '处理中' }[s] || s; }
-let kbCurrentId = null;
+
+// ===== 知识库 =====
+const _kbStore = new Map();
+
 function renderKB() {
-  const list = document.getElementById('kbList');
+  const el = document.getElementById('kbList');
   const search = document.getElementById('kbSearch')?.value || '';
-  const cat = document.getElementById('kbCategoryFilter')?.value || '';
-  list.innerHTML = '<div style="padding:20px;color:var(--on-surface-variant);">加载中...</div>';
+  const cat    = document.getElementById('kbCategoryFilter')?.value || '';
+  el.innerHTML = '<div style="padding:20px;color:var(--on-surface-variant);">加载中...</div>';
   let url = '/kb?';
   if (search) url += 'search=' + encodeURIComponent(search) + '&';
-  if (cat) url += 'category=' + encodeURIComponent(cat);
-  apiFetch(url)
+  if (cat)    url += 'category=' + encodeURIComponent(cat);
+  api(url)
     .then(kb => {
-      if (!kb.length) { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--on-surface-variant);">未找到匹配的知识条目</div>'; return; }
-      list.innerHTML = kb.map(k => `<div class="kb-item"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;"><div style="flex:1;"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="font-size:15px;font-weight:600;">${escapeHTML(k.title)}</span><span style="font-size:11px;background:var(--surface-container);padding:2px 8px;border-radius:6px;color:var(--on-surface-variant);">${k.category}</span></div><div style="font-size:13px;color:var(--on-surface-variant);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHTML(k.content)}</div><div style="font-size:11px;color:var(--outline);margin-top:8px;">更新于 ${k.updated_at} · ${k.author}</div></div><div style="display:flex;gap:6px;flex-shrink:0;"><button class="btn-outline" style="padding:5px 10px;" onclick="editKBById(this)" data-id="${k.id}" data-title="${escapeHTML(k.title)}" data-category="${k.category}" data-content="${escapeHTML(k.content)}" data-author="${k.author}"><span class="material-symbols-outlined" style="font-size:14px;">edit</span></button><button class="btn-outline" style="padding:5px 10px;color:var(--error);border-color:var(--error-container);" onclick="deleteKB('${k.id}')"><span class="material-symbols-outlined" style="font-size:14px;">delete</span></button></div></div></div>`).join('');
-    }).catch(() => { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--error);">加载失败</div>'; });
+      _kbStore.clear();
+      kb.forEach(k => _kbStore.set(k.id, k));
+      if (!kb.length) { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--on-surface-variant);">未找到匹配的知识条目</div>'; return; }
+      el.innerHTML = kb.map(k => `
+        <div class="kb-item">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <span style="font-size:15px;font-weight:600;">${esc(k.title)}</span>
+                <span style="font-size:11px;background:var(--surface-container);padding:2px 8px;border-radius:6px;color:var(--on-surface-variant);">${esc(k.category)}</span>
+              </div>
+              <div style="font-size:13px;color:var(--on-surface-variant);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${esc(k.content)}</div>
+              <div style="font-size:11px;color:var(--outline);margin-top:8px;">更新于 ${esc(k.updated_at)} · ${esc(k.author)}</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0;">
+              <button class="btn-outline" style="padding:5px 10px;" onclick="editKB('${esc(k.id)}')">
+                <span class="material-symbols-outlined" style="font-size:14px;">edit</span>
+              </button>
+              <button class="btn-outline" style="padding:5px 10px;color:var(--error);border-color:var(--error-container);" onclick="deleteKB('${esc(k.id)}')">
+                <span class="material-symbols-outlined" style="font-size:14px;">delete</span>
+              </button>
+            </div>
+          </div>
+        </div>`).join('');
+    })
+    .catch(() => { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--error);">加载失败</div>'; });
 }
-function filterKB() { renderKB(); }
-function showAddKBModal() { kbCurrentId = null; document.getElementById('kbModalContent').innerHTML = kbModalForm(null); document.getElementById('kbModal').style.display = 'flex'; }
-function editKB(id) {}
-function editKBById(btn) {
-  const id      = btn.dataset.id;
-  const item    = {
-    id       : id,
-    title    : btn.dataset.title,
-    category : btn.dataset.category,
-    content  : btn.dataset.content,
-    author   : btn.dataset.author,
-  };
-  kbCurrentId = id;
-  document.getElementById('kbModalContent').innerHTML = kbModalForm(item);
+
+function showAddKBModal() {
+  _editingKBId = null;
+  document.getElementById('kbModalContent').innerHTML = kbForm(null);
   document.getElementById('kbModal').style.display = 'flex';
 }
-function kbModalForm(item) {
-  return `<div style="font-size:18px;font-weight:600;margin-bottom:20px;">${item?'编辑知识条目':'添加知识条目'}</div><div style="display:flex;flex-direction:column;gap:14px;"><div><label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">标题</label><input id="kb_title" type="text" value="${item?escapeHTML(item.title):''}" placeholder="政策条目标题" style="width:100%;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 12px;font-size:14px;outline:none;"/></div><div><label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">分类</label><select id="kb_category" style="width:100%;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 12px;font-size:14px;outline:none;background:white;">${['假期','薪资','证明','合同','报销','考勤','其他'].map(c=>`<option ${item?.category===c?'selected':''}>${c}</option>`).join('')}</select></div><div><label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">内容</label><textarea id="kb_content" rows="6" placeholder="详细政策内容..." style="width:100%;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 12px;font-size:14px;outline:none;resize:vertical;">${item?escapeHTML(item.content):''}</textarea></div></div><div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;"><button class="btn-outline" onclick="closeKBModal()">取消</button><button class="btn-primary" onclick="saveKBItem()">保存</button></div>`;
+
+let _editingKBId = null;
+function editKB(id) {
+  const item = _kbStore.get(id);
+  if (!item) { showToast('请刷新后重试', 'error'); return; }
+  _editingKBId = id;
+  document.getElementById('kbModalContent').innerHTML = kbForm(item);
+  document.getElementById('kbModal').style.display = 'flex';
 }
-function saveKBItem() {
-  const title = document.getElementById('kb_title').value.trim();
-  const category = document.getElementById('kb_category').value;
-  const kbContent = document.getElementById('kb_content').value.trim();
-  if (!title || !kbContent) { showToast('请填写标题和内容', 'error'); return; }
-  const payload = { title, category, content: kbContent };
-  const req = kbCurrentId
-    ? apiFetch('/kb/' + kbCurrentId, { method:'PUT', body: payload })
-    : apiFetch('/kb', { method:'POST', body: payload });
+
+function kbForm(item) {
+  const inputStyle = 'width:100%;border:1px solid var(--outline-variant);border-radius:8px;padding:9px 12px;font-size:14px;outline:none;font-family:Inter,sans-serif;';
+  return `
+    <div style="font-size:18px;font-weight:600;margin-bottom:20px;">${item ? '编辑知识条目' : '添加知识条目'}</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">标题</label>
+        <input id="kb_title" type="text" value="${item ? esc(item.title) : ''}" placeholder="政策条目标题" style="${inputStyle}"/>
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">分类</label>
+        <select id="kb_category" style="${inputStyle}background:white;">
+          ${['假期','薪资','证明','合同','报销','考勤','其他'].map(c =>
+            `<option ${item?.category===c?'selected':''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div>
+        <label style="font-size:13px;font-weight:500;display:block;margin-bottom:5px;">内容</label>
+        <textarea id="kb_content" rows="6" placeholder="详细政策内容..." style="${inputStyle}resize:vertical;">${item ? esc(item.content) : ''}</textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+      <button class="btn-outline" onclick="closeModal('kbModal')">取消</button>
+      <button class="btn-primary" onclick="saveKB()">保存</button>
+    </div>`;
+}
+
+function saveKB() {
+  const title   = document.getElementById('kb_title').value.trim();
+  const category= document.getElementById('kb_category').value;
+  const content = document.getElementById('kb_content').value.trim();
+  if (!title || !content) { showToast('请填写标题和内容', 'error'); return; }
+  const body = { title, category, content };
+  const req = _editingKBId
+    ? api('/kb/' + _editingKBId, { method:'PUT', body })
+    : api('/kb', { method:'POST', body });
   req.then(() => {
-    showToast(kbCurrentId ? '知识条目已更新' : '知识条目已添加', 'success');
-    closeKBModal(); renderKB();
-  }).catch(e => showToast('保存失败: ' + e.message, 'error'));
+    showToast(_editingKBId ? '知识条目已更新' : '知识条目已添加', 'success');
+    closeModal('kbModal');
+    renderKB();
+  }).catch(e => showToast('保存失败：' + e.message, 'error'));
 }
-function deleteKB(id) { if (!confirm('确认删除此知识条目？')) return; apiFetch('/kb/'+id,{method:'DELETE'}).then(()=>{showToast('已删除','success');renderKB();}).catch(e=>showToast('删除失败','error')); }
-function closeKBModal(e) { if (e && e.target !== document.getElementById('kbModal')) return; document.getElementById('kbModal').style.display = 'none'; }
-function setApprovalFilter(filter, el) { STATE.currentApprovalFilter = filter; document.querySelectorAll('#page-approval .chip').forEach(c=>c.classList.remove('selected')); el.classList.add('selected'); renderApproval(); }
+
+function deleteKB(id) {
+  if (!confirm('确认删除此知识条目？')) return;
+  api('/kb/' + id, { method:'DELETE' })
+    .then(() => { showToast('已删除', 'success'); renderKB(); })
+    .catch(e => showToast('删除失败：' + e.message, 'error'));
+}
+
+// ===== 审批 =====
+function setApprovalFilter(filter, el) {
+  STATE.approvalFilter = filter;
+  document.querySelectorAll('#page-approval .chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  renderApproval();
+}
+
 function renderApproval() {
-  const list = document.getElementById('approvalList');
-  list.innerHTML = '<div style="padding:20px;color:var(--on-surface-variant);">加载中...</div>';
-  const statusQ = STATE.currentApprovalFilter !== 'all' ? '?status=' + STATE.currentApprovalFilter : '';
-  apiFetch('/applications' + statusQ)
+  const el = document.getElementById('approvalList');
+  el.innerHTML = '<div style="padding:20px;color:var(--on-surface-variant);">加载中...</div>';
+  const q = STATE.approvalFilter !== 'all' ? '?status=' + STATE.approvalFilter : '';
+  api('/applications' + q)
     .then(apps => {
-      if (!apps.length) { list.innerHTML = '<div style="text-align:center;padding:60px;color:var(--on-surface-variant);">暂无申请记录</div>'; return; }
-      list.innerHTML = apps.map(a => `<div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:18px 20px;"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;"><div style="flex:1;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;"><span style="font-size:15px;font-weight:600;">${a.type}</span><span class="badge badge-${a.status}">${statusLabel(a.status)}</span></div><div style="font-size:13px;color:var(--on-surface-variant);">申请人：${a.applicant} · ${a.dept} · ${a.submit_at}</div><div style="font-size:13px;margin-top:8px;">${Object.entries(a.detail||{}).map(([k,v])=>`<span style="margin-right:12px;">${k}：${v}</span>`).join('')}</div></div><div style="display:flex;gap:8px;flex-shrink:0;">${a.status==='pending'?`<button class="btn-primary" style="padding:6px 14px;font-size:12px;" onclick="approveApplication('${a.id}')"><span class="material-symbols-outlined" style="font-size:14px;">check</span> 通过</button><button class="btn-outline" style="padding:6px 14px;font-size:12px;color:var(--error);border-color:var(--error-container);" onclick="rejectApplication('${a.id}')"><span class="material-symbols-outlined" style="font-size:14px;">close</span> 拒绝</button>`:''}</div></div></div>`).join('');
-    }).catch(() => { list.innerHTML = '<div style="text-align:center;padding:40px;color:var(--error);">加载失败</div>'; });
+      if (!apps.length) { el.innerHTML = '<div style="text-align:center;padding:60px;color:var(--on-surface-variant);">暂无申请记录</div>'; return; }
+      el.innerHTML = apps.map(a => `
+        <div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:18px 20px;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                <span style="font-size:15px;font-weight:600;">${esc(a.type)}</span>
+                <span class="badge badge-${a.status}">${statusLabel(a.status)}</span>
+              </div>
+              <div style="font-size:13px;color:var(--on-surface-variant);">申请人：${esc(a.applicant)} · ${esc(a.dept)} · ${esc(a.submit_at)}</div>
+              <div style="font-size:13px;margin-top:8px;color:var(--on-surface);">
+                ${Object.entries(a.detail||{}).map(([k,v])=>`<span style="margin-right:12px;">${esc(k)}：${esc(v)}</span>`).join('')}
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;flex-shrink:0;">
+              ${a.status === 'pending' ? `
+                <button class="btn-primary" style="padding:6px 14px;font-size:12px;" onclick="approveApp('${a.id}')">
+                  <span class="material-symbols-outlined" style="font-size:14px;">check</span> 通过
+                </button>
+                <button class="btn-outline" style="padding:6px 14px;font-size:12px;color:var(--error);border-color:var(--error-container);" onclick="rejectApp('${a.id}')">
+                  <span class="material-symbols-outlined" style="font-size:14px;">close</span> 拒绝
+                </button>` : ''}
+            </div>
+          </div>
+        </div>`).join('');
+    })
+    .catch(() => { el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--error);">加载失败</div>'; });
 }
-function approveApplication(id) { apiFetch('/applications/'+id+'/approve',{method:'PUT'}).then(()=>{showToast('申请已通过','success');renderApproval();}).catch(e=>showToast('操作失败','error')); }
-function rejectApplication(id) { const reason=prompt('请输入拒绝原因（可选）：')||'不符合申请条件'; apiFetch('/applications/'+id+'/reject',{method:'PUT',body:{reason}}).then(()=>{showToast('申请已拒绝','success');renderApproval();}).catch(e=>showToast('操作失败','error')); }
-function closeApprovalModal(e) { if (e && e.target !== document.getElementById('approvalModal')) return; document.getElementById('approvalModal').style.display = 'none'; }
+
+function approveApp(id) {
+  api('/applications/' + id + '/approve', { method:'PUT' })
+    .then(() => { showToast('申请已通过', 'success'); renderApproval(); })
+    .catch(e => showToast('操作失败：' + e.message, 'error'));
+}
+function rejectApp(id) {
+  const reason = prompt('请输入拒绝原因（可选）：') || '不符合申请条件';
+  api('/applications/' + id + '/reject', { method:'PUT', body:{ reason } })
+    .then(() => { showToast('申请已拒绝', 'success'); renderApproval(); })
+    .catch(e => showToast('操作失败：' + e.message, 'error'));
+}
+
+// ===== 统计 =====
 function renderAnalytics() {
   const el = document.getElementById('analyticsContent');
   el.innerHTML = '<div style="padding:20px;color:var(--on-surface-variant);">加载中...</div>';
-  apiFetch('/analytics').then(d => {
-    const {applications:a, kb_count, chat_count, type_distribution, kb_categories} = d;
-    const maxCount = type_distribution[0]?.cnt || 1;
-    el.innerHTML = `
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
-        <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">总申请数</div><div style="font-size:32px;font-weight:700;color:var(--primary);">${a.total}</div><div style="font-size:12px;color:var(--on-surface-variant);">累计提交</div></div>
-        <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">待审批</div><div style="font-size:32px;font-weight:700;color:#d97706;">${a.pending}</div><div style="font-size:12px;color:var(--on-surface-variant);">需要处理</div></div>
-        <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">已通过</div><div style="font-size:32px;font-weight:700;color:#065f46;">${a.approved}</div><div style="font-size:12px;color:var(--on-surface-variant);">通过率 ${a.total?Math.round(a.approved/a.total*100):0}%</div></div>
-        <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">知识库条目</div><div style="font-size:32px;font-weight:700;color:var(--secondary);">${kb_count}</div></div>
-        <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">AI 问答次数</div><div style="font-size:32px;font-weight:700;color:var(--primary);">${chat_count}</div><div style="font-size:12px;color:var(--on-surface-variant);">累计会话</div></div>
-      </div>
-      <div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:20px;margin-bottom:16px;">
-        <div style="font-size:15px;font-weight:600;margin-bottom:16px;">申请类型分布</div>
-        ${type_distribution.map(({type,cnt})=>`<div style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>${type}</span><span style="color:var(--on-surface-variant);">${cnt} 件</span></div><div style="height:8px;background:var(--surface-container);border-radius:4px;overflow:hidden;"><div class="analytics-bar" style="width:${Math.round(cnt/maxCount*100)}%;"></div></div></div>`).join('')}
-      </div>
-      <div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:20px;">
-        <div style="font-size:15px;font-weight:600;margin-bottom:16px;">
-          知识库覆盖
-          <span style="font-size:12px;font-weight:400;color:var(--secondary);margin-left:8px;">✦ 向量检索已启用</span>
+  api('/analytics')
+    .then(d => {
+      const a = d.applications;
+      const maxCount = d.type_distribution[0]?.cnt || 1;
+      el.innerHTML = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px;">
+          <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">总申请数</div><div style="font-size:32px;font-weight:700;color:var(--primary);">${a.total}</div><div style="font-size:12px;color:var(--on-surface-variant);">累计提交</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">待审批</div><div style="font-size:32px;font-weight:700;color:#d97706;">${a.pending}</div><div style="font-size:12px;color:var(--on-surface-variant);">需要处理</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">已通过</div><div style="font-size:32px;font-weight:700;color:#065f46;">${a.approved}</div><div style="font-size:12px;color:var(--on-surface-variant);">通过率 ${a.total?Math.round(a.approved/a.total*100):0}%</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">知识库条目</div><div style="font-size:32px;font-weight:700;color:var(--secondary);">${d.kb_count}</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--on-surface-variant);margin-bottom:8px;">AI 问答次数</div><div style="font-size:32px;font-weight:700;color:var(--primary);">${d.chat_count}</div><div style="font-size:12px;color:var(--on-surface-variant);">累计问答</div></div>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;">
-          ${kb_categories.map(({category,cnt})=>`<div style="display:flex;align-items:center;gap:6px;background:var(--surface-low);border:1px solid var(--outline-variant);border-radius:8px;padding:8px 14px;"><span style="font-size:13px;font-weight:600;">${category}</span><span style="font-size:12px;color:var(--on-surface-variant);">${cnt} 条</span></div>`).join('')}
+        <div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:20px;margin-bottom:16px;">
+          <div style="font-size:15px;font-weight:600;margin-bottom:16px;">申请类型分布</div>
+          ${d.type_distribution.length ? d.type_distribution.map(({type,cnt}) => `
+            <div style="margin-bottom:12px;">
+              <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
+                <span>${esc(type)}</span><span style="color:var(--on-surface-variant);">${cnt} 件</span>
+              </div>
+              <div style="height:8px;background:var(--surface-container);border-radius:4px;overflow:hidden;">
+                <div class="analytics-bar" style="width:${Math.round(cnt/maxCount*100)}%;"></div>
+              </div>
+            </div>`).join('') : '<div style="color:var(--on-surface-variant);font-size:13px;">暂无数据</div>'}
         </div>
-      </div>`;
-  }).catch(() => { el.innerHTML = '<div style="padding:40px;color:var(--error);">加载失败</div>'; });
+        <div style="background:white;border:1px solid var(--outline-variant);border-radius:12px;padding:20px;">
+          <div style="font-size:15px;font-weight:600;margin-bottom:16px;">
+            知识库覆盖
+            <span style="font-size:12px;font-weight:400;color:var(--secondary);margin-left:8px;">✦ ChromaDB 向量检索已启用</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            ${d.kb_categories.map(({category,cnt}) => `
+              <div style="display:flex;align-items:center;gap:6px;background:var(--surface-low);border:1px solid var(--outline-variant);border-radius:8px;padding:8px 14px;">
+                <span style="font-size:13px;font-weight:600;">${esc(category)}</span>
+                <span style="font-size:12px;color:var(--on-surface-variant);">${cnt} 条</span>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    })
+    .catch(() => { el.innerHTML = '<div style="padding:40px;color:var(--error);">加载失败</div>'; });
 }
-function showApiConfig() { document.getElementById('apiKeyInput').value = STATE.apiKey; document.getElementById('apiModal').style.display = 'flex'; }
-function saveApiKey() { const newKey = document.getElementById('apiKeyInput').value.trim(); if (newKey) { STATE.apiKey = newKey; } closeApiModal(); showToast('配置已保存','success'); }
-function closeApiModal(e) { if (e && e.target !== document.getElementById('apiModal')) return; document.getElementById('apiModal').style.display = 'none'; }
-function showToast(msg, type='success') {
-  const colors={success:'#065f46',error:'var(--error)',warning:'#d97706',info:'var(--primary)'};
-  const icons={success:'check_circle',error:'error',warning:'warning',info:'info'};
-  const toast=document.createElement('div');
-  toast.style.cssText=`position:fixed;bottom:24px;right:24px;background:${type==='success'?'#f0fdf4':type==='error'?'#fef2f2':type==='warning'?'#fffbeb':'#eff6ff'};border:1px solid ${colors[type]+'33'};color:${colors[type]};padding:12px 18px;border-radius:10px;font-size:14px;font-weight:500;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 4px 12px rgba(0,0,0,0.1);`;
-  toast.innerHTML=`<span class="material-symbols-outlined" style="font-size:18px;color:${colors[type]};">${icons[type]}</span>${msg}`;
-  document.body.appendChild(toast);
-  setTimeout(()=>{toast.style.opacity='0';toast.style.transition='opacity 0.3s';setTimeout(()=>toast.remove(),300);},3000);
+
+// ===== 移动端控制 =====
+function openSidebar() {
+  document.querySelector('.sidebar').classList.add('open');
+  document.getElementById('mobileOverlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
 }
-function escapeHTML(str) { if(!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function closeSidebar() {
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('mobileOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+function isMobile() { return window.innerWidth <= 768; }
+
+// ===== 初始化 =====
 renderNav();
 showPage('chat');
-setTimeout(() => showToast('DeepSeek AI 已就绪，可以开始提问', 'success'), 800);
+setTimeout(() => showToast('DeepSeek AI + ChromaDB 向量检索已就绪', 'success'), 800);
 </script>
 </body>
 </html>
