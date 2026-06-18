@@ -25,7 +25,6 @@ body { background: var(--surface); color: var(--on-surface); margin: 0; }
 @media (max-width: 768px) {
   .sidebar { position: fixed; left: 0; top: 0; height: 100vh; transform: translateX(-100%); box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
   .sidebar.open { transform: translateX(0); }
-  .mobile-overlay { display: block !important; }
   .mobile-header { display: flex !important; }
   #app { flex-direction: column; }
   .main-content { height: 100vh; }
@@ -73,7 +72,7 @@ body { background: var(--surface); color: var(--on-surface); margin: 0; }
 .workflow-card { background: var(--surface-white); border: 1px solid var(--outline-variant); border-radius: 12px; padding: 18px 20px; cursor: pointer; transition: all 0.15s; }
 .workflow-card:hover { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,74,198,0.1); transform: translateY(-1px); }
 
-.mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 39; }
+.mobile-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 39; }
 .mobile-header { display: none; align-items: center; padding: 12px 16px; background: white; border-bottom: 1px solid var(--outline-variant); gap: 12px; position: sticky; top: 0; z-index: 30; }
 .mobile-header-title { font-size: 16px; font-weight: 600; flex: 1; }
 </style>
@@ -81,7 +80,7 @@ body { background: var(--surface); color: var(--on-surface); margin: 0; }
 <body>
 <div id="app" style="display:flex;height:100vh;overflow:hidden;">
   <!-- 移动端遮罩 -->
-  <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
+  <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()" style="display:none;"></div>
   <!-- 移动端顶部导航栏 -->
   <div class="mobile-header" id="mobileHeader">
     <button onclick="openSidebar()" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;align-items:center;">
