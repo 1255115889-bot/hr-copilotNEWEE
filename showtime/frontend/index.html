@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI员工政策顾问</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --primary: #1a56db;
+  --primary-dark: #1e429f;
+  --primary-light: #ebf0ff;
+  --text: #111928;
+  --text-2: #4b5563;
+  --text-3: #9ca3af;
+  --border: #e5e7eb;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.06);
+  --radius: 10px;
+  --green: #057a55;
+  --green-bg: #f3faf7;
+  --orange: #b45309;
+  --orange-bg: #fffbeb;
+  --red: #c81e1e;
+  --red-bg: #fdf2f2;
+}
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; line-height: 1; }
+
+/* ── 顶栏 ── */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+  z-index: 10;
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.logo { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.logo .material-symbols-outlined { color: white; font-size: 20px; }
+.header-title { font-size: 16px; font-weight: 600; color: var(--text); }
+.header-subtitle { font-size: 12px; color: var(--text-3); margin-top: 1px; }
+.header-badge { display: flex; align-items: center; gap: 5px; background: var(--green-bg); color: var(--green); border: 1px solid #a7f3d0; border-radius: 20px; padding: 4px 10px; font-size: 12px; font-weight: 500; }
+.header-badge .dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ── 主体 ── */
+.main { display: flex; flex: 1; overflow: hidden; }
+
+/* ── 左侧边栏 ── */
+.sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
+.sidebar-title { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+.policy-tag { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 7px; cursor: pointer; font-size: 13px; color: var(--text-2); transition: all 0.15s; margin-bottom: 3px; }
+.policy-tag:hover { background: var(--primary-light); color: var(--primary); }
+.policy-tag .material-symbols-outlined { font-size: 16px; }
+.quick-q { padding: 7px 10px; border-radius: 7px; font-size: 12.5px; color: var(--text-2); cursor: pointer; transition: all 0.15s; line-height: 1.4; border: 1px solid transparent; margin-bottom: 4px; }
+.quick-q:hover { background: var(--primary-light); color: var(--primary); border-color: #c3d3ff; }
+.stats-box { padding: 16px; flex: 1; }
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.stat-row:last-child { border-bottom: none; }
+.stat-label { color: var(--text-3); }
+.stat-val { font-weight: 600; color: var(--primary); }
+
+/* ── 聊天区 ── */
+.chat-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+.messages::-webkit-scrollbar { width: 4px; }
+.messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* 欢迎页 */
+.welcome { text-align: center; padding: 60px 20px; }
+.welcome-icon { width: 72px; height: 72px; background: var(--primary); border-radius: 20px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+.welcome-icon .material-symbols-outlined { color: white; font-size: 36px; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.welcome h2 { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+.welcome p { font-size: 14px; color: var(--text-2); line-height: 1.7; max-width: 440px; margin: 0 auto 28px; }
+.welcome-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.chip { display: inline-flex; align-items: center; gap: 5px; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 13px; color: var(--text-2); cursor: pointer; transition: all 0.15s; box-shadow: var(--shadow); }
+.chip:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* 消息气泡 */
+.msg { display: flex; gap: 10px; max-width: 840px; }
+.msg.user { flex-direction: row-reverse; margin-left: auto; }
+.msg-avatar { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; font-weight: 600; }
+.msg.user .msg-avatar { background: var(--primary); color: white; font-size: 12px; }
+.msg.ai .msg-avatar { background: linear-gradient(135deg, #1a56db, #5850ec); color: white; }
+.msg-avatar .material-symbols-outlined { font-size: 16px; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.bubble { padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.65; max-width: calc(100% - 50px); }
+.msg.user .bubble { background: var(--primary); color: white; border-radius: 12px 4px 12px 12px; }
+.msg.ai .bubble { background: var(--surface); border: 1px solid var(--border); border-radius: 4px 12px 12px 12px; box-shadow: var(--shadow); }
+.bubble-meta { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.source-badge { display: inline-flex; align-items: center; gap: 4px; background: var(--primary-light); color: var(--primary); border-radius: 5px; padding: 3px 8px; font-size: 11.5px; font-weight: 500; margin: 3px 3px 3px 0; }
+.source-badge .material-symbols-outlined { font-size: 13px; }
+.not-found-note { display: flex; align-items: flex-start; gap: 8px; background: var(--orange-bg); border: 1px solid #fcd34d; border-radius: 8px; padding: 10px 12px; font-size: 13px; color: var(--orange); margin-top: 8px; }
+.not-found-note .material-symbols-outlined { font-size: 16px; flex-shrink: 0; margin-top: 1px; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.thinking { display: flex; align-items: center; gap: 6px; color: var(--text-3); font-size: 13px; padding: 10px 0; }
+.thinking-dots { display: flex; gap: 4px; }
+.thinking-dots span { width: 6px; height: 6px; background: var(--text-3); border-radius: 50%; animation: bounce 1.4s infinite; }
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100%{transform:scale(0.7);opacity:0.3} 40%{transform:scale(1);opacity:1} }
+
+/* 输入区 */
+.input-area {
+  padding: 16px 24px 20px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.input-row { display: flex; gap: 10px; max-width: 840px; }
+.input-wrap { flex: 1; position: relative; }
+textarea#userInput {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 11px 44px 11px 14px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+  min-height: 46px;
+  max-height: 120px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color: var(--text);
+  background: var(--bg);
+}
+textarea#userInput:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); background: white; }
+textarea#userInput::placeholder { color: var(--text-3); }
+.send-btn {
+  width: 46px; height: 46px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.send-btn:hover { background: var(--primary-dark); }
+.send-btn:disabled { background: var(--border); cursor: not-allowed; }
+.send-btn .material-symbols-outlined { font-size: 20px; }
+.input-hint { font-size: 11.5px; color: var(--text-3); margin-top: 8px; text-align: center; }
+
+/* 响应式 */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .messages { padding: 16px; }
+  .input-area { padding: 12px 16px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="logo"><span class="material-symbols-outlined">support_agent</span></div>
+    <div>
+      <div class="header-title">AI 员工政策顾问</div>
+      <div class="header-subtitle">基于《公司综合管理制度汇编》</div>
+    </div>
+  </div>
+  <div class="header-badge">
+    <div class="dot"></div>
+    <span>DeepSeek 已连接</span>
+  </div>
+</header>
+
+<div class="main">
+  <!-- 侧边栏 -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">制度模块</div>
+      <div class="policy-tag" onclick="filterByCategory('考勤管理')">
+        <span class="material-symbols-outlined">schedule</span> 考勤管理制度
+      </div>
+      <div class="policy-tag" onclick="filterByCategory('育儿假')">
+        <span class="material-symbols-outlined">child_care</span> 育儿假专项政策
+      </div>
+      <div class="policy-tag" onclick="filterByCategory('薪酬核算')">
+        <span class="material-symbols-outlined">payments</span> 薪酬核算细化规则
+      </div>
+    </div>
+    <div class="sidebar-section" style="flex:1;overflow-y:auto;">
+      <div class="sidebar-title">常见问题</div>
+      <div class="quick-q" onclick="sendQuick(this)">迟到了怎么处理？</div>
+      <div class="quick-q" onclick="sendQuick(this)">加班费怎么计算？</div>
+      <div class="quick-q" onclick="sendQuick(this)">病假工资怎么算？</div>
+      <div class="quick-q" onclick="sendQuick(this)">育儿假有几天，工资怎么发？</div>
+      <div class="quick-q" onclick="sendQuick(this)">年终奖发放条件是什么？</div>
+      <div class="quick-q" onclick="sendQuick(this)">忘打卡了怎么办？</div>
+      <div class="quick-q" onclick="sendQuick(this)">事假请假流程是什么？</div>
+      <div class="quick-q" onclick="sendQuick(this)">试用期工资怎么算？</div>
+      <div class="quick-q" onclick="sendQuick(this)">离职当月社保怎么处理？</div>
+      <div class="quick-q" onclick="sendQuick(this)">出差遇到休息日算加班吗？</div>
+    </div>
+    <div class="stats-box" id="statsBox" style="border-top:1px solid var(--border);flex:0;padding:12px 16px;">
+      <div class="sidebar-title">使用统计</div>
+      <div class="stat-row"><span class="stat-label">累计问答</span><span class="stat-val" id="statTotal">-</span></div>
+      <div class="stat-row"><span class="stat-label">知识库命中</span><span class="stat-val" id="statHit">-</span></div>
+      <div class="stat-row"><span class="stat-label">政策条目</span><span class="stat-val" id="statKB">-</span></div>
+    </div>
+  </aside>
+
+  <!-- 聊天区 -->
+  <div class="chat-area">
+    <div class="messages" id="messages">
+      <div class="welcome" id="welcome">
+        <div class="welcome-icon"><span class="material-symbols-outlined">support_agent</span></div>
+        <h2>您好！我是政策小助手</h2>
+        <p>我已读取《公司综合管理制度汇编》，包含考勤管理、育儿假、薪酬核算三大模块，共 <strong>29 条</strong>政策条目。请用自然语言提问，我会基于制度原文为您解答。</p>
+        <div class="welcome-chips">
+          <div class="chip" onclick="sendQuick(this)"><span class="material-symbols-outlined" style="font-size:14px;">schedule</span> 迟到怎么处理？</div>
+          <div class="chip" onclick="sendQuick(this)"><span class="material-symbols-outlined" style="font-size:14px;">child_care</span> 育儿假工资怎么算？</div>
+          <div class="chip" onclick="sendQuick(this)"><span class="material-symbols-outlined" style="font-size:14px;">payments</span> 加班费标准是什么？</div>
+          <div class="chip" onclick="sendQuick(this)"><span class="material-symbols-outlined" style="font-size:14px;">medication</span> 病假工资多少？</div>
+        </div>
+      </div>
+    </div>
+    <div class="input-area">
+      <div class="input-row">
+        <div class="input-wrap">
+          <textarea id="userInput" placeholder="请输入您想了解的HR政策问题..." rows="1"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        </div>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="发送">
+          <span class="material-symbols-outlined">send</span>
+        </button>
+      </div>
+      <div class="input-hint">回答仅基于公司制度手册 · 如有疑问请联系 HR 确认</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = '/showtime/api';
+let sessionId = null;
+let isLoading = false;
+
+// ── 初始化 ────────────────────────────────────────────────────
+async function init() {
+  try {
+    const r = await fetch(API + '/stats');
+    const d = await r.json();
+    document.getElementById('statTotal').textContent = d.total_queries;
+    document.getElementById('statHit').textContent   = d.found_in_kb;
+    document.getElementById('statKB').textContent    = d.kb_policies;
+  } catch(e) {}
+}
+
+// ── 工具 ─────────────────────────────────────────────────────
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function md(s) {
+  return esc(s)
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/【(.*?)】/g, '<strong>【$1】</strong>')
+    .replace(/\n/g, '<br/>');
+}
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+function scrollBottom() {
+  const m = document.getElementById('messages');
+  m.scrollTop = m.scrollHeight;
+}
+
+// ── 快捷问题 ──────────────────────────────────────────────────
+function sendQuick(el) {
+  const q = el.textContent.trim().replace(/^[\s\S]{0,2}/, '').trim() || el.textContent.trim();
+  document.getElementById('userInput').value = q;
+  sendMessage();
+}
+function filterByCategory(cat) {
+  const hints = {
+    '考勤管理': '我想了解考勤管理相关政策，比如迟到早退、请假、加班怎么处理？',
+    '育儿假':   '育儿假的相关政策有哪些？包括天数、工资和申请流程。',
+    '薪酬核算': '薪酬核算规则是什么？包括日薪计算、扣款规则、年终奖等。'
+  };
+  document.getElementById('userInput').value = hints[cat] || cat;
+  sendMessage();
+}
+
+// ── 添加消息 ──────────────────────────────────────────────────
+function addUserMsg(text) {
+  document.getElementById('welcome')?.remove();
+  const d = document.createElement('div');
+  d.className = 'msg user';
+  d.innerHTML = `
+    <div class="msg-avatar">我</div>
+    <div class="bubble">${esc(text)}</div>`;
+  document.getElementById('messages').appendChild(d);
+  scrollBottom();
+}
+
+function addThinking() {
+  const d = document.createElement('div');
+  d.className = 'msg ai';
+  d.id = 'thinking';
+  d.innerHTML = `
+    <div class="msg-avatar"><span class="material-symbols-outlined">support_agent</span></div>
+    <div class="bubble">
+      <div class="thinking">
+        <div class="thinking-dots"><span></span><span></span><span></span></div>
+        正在查阅制度手册…
+      </div>
+    </div>`;
+  document.getElementById('messages').appendChild(d);
+  scrollBottom();
+}
+
+function addAIMsg(answer, sources, foundInKB) {
+  document.getElementById('thinking')?.remove();
+  const d = document.createElement('div');
+  d.className = 'msg ai';
+
+  let sourcesHtml = '';
+  if (sources && sources.length > 0) {
+    sourcesHtml = `<div class="bubble-meta">
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:5px;">政策依据来源</div>
+      ${[...new Set(sources)].map(s => `<span class="source-badge"><span class="material-symbols-outlined">menu_book</span>${esc(s)}</span>`).join('')}
+    </div>`;
+  }
+
+  let notFoundHtml = '';
+  if (!foundInKB) {
+    notFoundHtml = `<div class="not-found-note">
+      <span class="material-symbols-outlined">info</span>
+      <span>该问题未在制度手册中检索到相关条款，上述回复仅供参考，请联系 HR 进一步确认。</span>
+    </div>`;
+  }
+
+  d.innerHTML = `
+    <div class="msg-avatar"><span class="material-symbols-outlined">support_agent</span></div>
+    <div class="bubble">
+      <div>${md(answer)}</div>
+      ${sourcesHtml}
+      ${notFoundHtml}
+    </div>`;
+  document.getElementById('messages').appendChild(d);
+  scrollBottom();
+}
+
+// ── 发送 ──────────────────────────────────────────────────────
+async function sendMessage() {
+  if (isLoading) return;
+  const input = document.getElementById('userInput');
+  const question = input.value.trim();
+  if (!question) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+
+  addUserMsg(question);
+  addThinking();
+
+  try {
+    const resp = await fetch(API + '/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ question, session_id: sessionId })
+    });
+    if (!resp.ok) throw new Error('API请求失败: ' + resp.status);
+    const data = await resp.json();
+    sessionId = data.session_id;
+    addAIMsg(data.answer, data.sources, data.found_in_kb);
+    // 更新统计
+    init();
+  } catch(e) {
+    document.getElementById('thinking')?.remove();
+    addAIMsg('抱歉，服务暂时不可用，请稍后重试。', [], false);
+  }
+
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
+  input.focus();
+}
+
+init();
+</script>
+</body>
+</html>
